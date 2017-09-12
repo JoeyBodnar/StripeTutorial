@@ -4,6 +4,16 @@
 
 #export("content") {
 <div>
-    
+<form action="pay" method="POST">
+<script
+src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+data-key=#(publishableKey)
+data-amount="999"
+data-name="Joeybodnar"
+data-description="Widget"
+data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+data-locale="auto">
+</script>
+</form>
 </div>
 }

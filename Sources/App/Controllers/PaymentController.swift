@@ -26,10 +26,18 @@ final class PaymentController {
     }
     
     func showPaymentPage(request: Request) throws -> ResponseRepresentable {
-        return try view.make("payments/pay", ["publishableKey": ""], for: request)
+        return try view.make("payments/pay", ["publishableKey": stripeConfig.publishableKey], for: request)
     }
     
     func pay(request: Request) throws -> ResponseRepresentable {
-        return "implement payment here"
+        if let token = request.data["stripeToken"]?.string {
+            return try Response.async { responder in
+                StripeAPIManager.chargeCard(withAmount: 999, withDescription: "first charge!", fromSourceToken: token, andConfig: self.stripeConfig, completion: { (completed, errorMessage) in
+                    if errorMessage == "" {
+                        responder.close(with: "success!")
+                    } else { responder.close(with: errorMessage) }
+                })
+            }
+        } else { return "no token in params" }
     }
 }
